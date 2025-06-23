@@ -1,2 +1,13 @@
-# ECOP11A-Projeto-Final
-Introdução a Engenharia de Controle e Automação
+# ECOP11A - Projeto Final Introducao a Engenharia
+Introdução a Programacao: Projeto final com introducao a engenharia e metodo cientifico
+
+## Equipe
+
+-
+-
+-
+-
+
+## Objetivo
+
+## Diagrama em blocos 
