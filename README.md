@@ -26,3 +26,5 @@ Controle e Log: O código do ESP32 gerencia a leitura dos sensores, a lógica de
 Em resumo, o projeto simula um sistema de triagem simples que pode ser aplicado em linhas de produção para automatizar a separação de objetos com base em seu tamanho.  
 
 ## Diagrama em blocos 
+
+![image](https://github.com/user-attachments/assets/a7ed25e5-d98b-4da0-a22d-dfd27c382ade)
