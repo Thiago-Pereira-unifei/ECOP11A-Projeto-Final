@@ -27,4 +27,5 @@ Em resumo, o projeto simula um sistema de triagem simples que pode ser aplicado 
 
 ## Diagrama em blocos 
 
-<div align="center">![image](https://github.com/user-attachments/assets/a7ed25e5-d98b-4da0-a22d-dfd27c382ade)
+<div align="center">
+  ![image](https://github.com/user-attachments/assets/a7ed25e5-d98b-4da0-a22d-dfd27c382ade)
