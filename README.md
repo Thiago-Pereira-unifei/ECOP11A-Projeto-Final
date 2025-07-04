@@ -25,11 +25,11 @@ Direcionamento Automatizado: Um servo motor (cancela) atua como um mecanismo de 
 Controle e Log: O código do ESP32 gerencia a leitura dos sensores, a lógica de classificação, o controle do servo e a comunicação serial para depuração e monitoramento.  
 Em resumo, o projeto simula um sistema de triagem simples que pode ser aplicado em linhas de produção para automatizar a separação de objetos com base em seu tamanho.  
 
-##Hipótese
+## Hipótese
 
 Se um sistema automatizado for implementado utilizando sensores ultrassônicos e infravermelhos conectados a um microcontrolador ESP32, então será possível detectar a presença de peças em uma esteira, classificá-las de acordo com o seu tamanho (pequena, média ou grande) e direcioná-las adequadamente por meio de um servo motor, garantindo maior eficiência e precisão no processo de triagem automatizada em linhas de produção.
 
-##Conclusão
+## Conclusão
 
 O sistema desenvolvido atendeu com sucesso ao objetivo proposto, demonstrando ser capaz de identificar a presença de peças utilizando um sensor ultrassônico e classificá-las corretamente com base no número de sensores infravermelhos ativados. A lógica implementada permitiu controlar LEDs indicativos e um servo motor que atuou como uma cancela direcional, redirecionando as peças conforme seu tamanho. Além disso, o acionamento automático da esteira garantiu o fluxo contínuo das peças durante o processo. Portanto, conclui-se que a hipótese foi validada: é viável utilizar sensores simples e um microcontrolador ESP32 para criar um sistema eficiente de triagem de peças, com potencial aplicação em ambientes industriais e educacionais.
 
