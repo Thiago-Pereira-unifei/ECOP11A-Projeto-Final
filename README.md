@@ -4,9 +4,9 @@ Introdução a Programacao: Projeto final com introducao a engenharia e metodo c
 ## Equipe
 
 -Higor Ribeiro  
--Joao kinjo  
+-João Kinjo  
 -Thiago Pereira  
--Tulio franciscon  
+-Tulio Franciscon  
 -Weister Oliveira  
 
 ## Objetivo
