@@ -134,7 +134,8 @@ O sistema desenvolvido atendeu com sucesso ao objetivo proposto, demonstrando se
 ## Diagrama em blocos
 
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/ca7d7462-ce95-42d5-a282-6a5ed5bb6f97" alt="Imagem centralizada" width="400">
+  <img src="https://github.com/user-attachments/assets/82886eb4-1077-4b1d-81f6-bddea5cf6434" alt="Imagem centralizada" width="400">
+
 </p>
 Para melhor visualizacao do diagrama, segue o link: https://miro.com/welcomeonboard/Zjh4YUNFWVlRbGUwYThXUnJKWkRTdEx2UE9zZlhVSllwTVlyWmlpZlc4aXdXNG8xM0xQSTAvV0ZYUHJWUU5SWEZzRFdWYkdYcndqZC96emRGYjlpbDRTMytnLzVBTWdVZGs2ckIyY211ZzFHTGRaazVxNnBoU3U5dG5wdXpuTUJhWWluRVAxeXRuUUgwWDl3Mk1qRGVRPT0hdjE=?share_link_id=345214892846
 
