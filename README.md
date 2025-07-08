@@ -3,11 +3,11 @@ Introdução a Programacao: Projeto final com introducao a engenharia e metodo c
 
 ## Equipe
 
--Higor Ribeiro  
--João Kinjo  
--Thiago Pereira  
--Tulio Franciscon  
--Weister Oliveira  
+-Higor Ribeiro 2025003973  
+-João Kinjo 2025008067  
+-Thiago Pereira 2025010851  
+-Tulio Franciscon 2025008503  
+-Weister Oliveira 2024016298  
 
 ## Objetivo
 
@@ -137,4 +137,10 @@ O sistema desenvolvido atendeu com sucesso ao objetivo proposto, demonstrando se
   <img src="https://github.com/user-attachments/assets/ca7d7462-ce95-42d5-a282-6a5ed5bb6f97" alt="Imagem centralizada" width="400">
 </p>
 Para melhor visualizacao do diagrama, segue o link: https://miro.com/welcomeonboard/Zjh4YUNFWVlRbGUwYThXUnJKWkRTdEx2UE9zZlhVSllwTVlyWmlpZlc4aXdXNG8xM0xQSTAvV0ZYUHJWUU5SWEZzRFdWYkdYcndqZC96emRGYjlpbDRTMytnLzVBTWdVZGs2ckIyY211ZzFHTGRaazVxNnBoU3U5dG5wdXpuTUJhWWluRVAxeXRuUUgwWDl3Mk1qRGVRPT0hdjE=?share_link_id=345214892846
+
+## Imagem do protótipo final
+
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/6f085424-f024-4373-8499-b592dfb7239c" alt="image" />
+</p>
 
