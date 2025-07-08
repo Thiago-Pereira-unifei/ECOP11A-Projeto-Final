@@ -87,20 +87,20 @@ void loop() {
     digitalWrite(ESTEIRA_PIN, HIGH);  
     delay(1000);  
 
-    int s1 = digitalRead(IR1_PIN);  
-    int s2 = digitalRead(IR2_PIN);  
-    int s3 = digitalRead(IR3_PIN);  
-    int total = s1 + s2 + s3;  
+  int s1 = digitalRead(IR1_PIN);  
+  int s2 = digitalRead(IR2_PIN);  
+  int s3 = digitalRead(IR3_PIN);  
+  int total = s1 + s2 + s3;  
   
-    digitalWrite(LED_SMALL, LOW);  
-    digitalWrite(LED_MEDIUM, LOW);  
-    digitalWrite(LED_LARGE, LOW);  
+  digitalWrite(LED_SMALL, LOW);  
+  digitalWrite(LED_MEDIUM, LOW);  
+  digitalWrite(LED_LARGE, LOW);  
   
-    if (total == 3) {  
-      cancela.write(180);  
-      digitalWrite(LED_LARGE, HIGH);  
-      Serial.println("Peça GRANDE → Cancela 180°");  
-    } else if (total == 2) {  
+  if (total == 3) {  
+    cancela.write(180);  
+    digitalWrite(LED_LARGE, HIGH);  
+    Serial.println("Peça GRANDE → Cancela 180°");  
+  } else if (total == 2) {  
       cancela.write(135);  
       digitalWrite(LED_MEDIUM, HIGH);  
       Serial.println("Peça MÉDIA → Cancela 135°");  
@@ -112,11 +112,11 @@ void loop() {
       Serial.println("Tamanho não identificado.");  
     }  
 
-    delay(2000);  
-    cancela.write(90);  
-    digitalWrite(ESTEIRA_PIN, LOW);  
-    Serial.println("Esteira desligada\n");  
-    delay(1000);  
+  delay(2000);  
+  cancela.write(90);  
+  digitalWrite(ESTEIRA_PIN, LOW);  
+  Serial.println("Esteira desligada\n");  
+  delay(1000);  
   }  
 }  
 
