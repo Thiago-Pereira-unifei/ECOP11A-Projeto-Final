@@ -31,100 +31,101 @@ Se um sistema automatizado for implementado utilizando sensores ultrassônicos e
 
 ## Código
 
-#include <ESP32Servo.h>
+  #include <Servo.h>
 
-// Definições de pinos
-#define TRIG_PIN     18
-#define ECHO_PIN     19
-#define IR1_PIN      23  // Sensor IR 1
-#define IR2_PIN      22  // Sensor IR 2
-#define IR3_PIN      21  // Sensor IR 3
-#define LED_SMALL    27
-#define LED_MEDIUM   26
-#define LED_LARGE    25
-#define SERVO_PIN    13
-#define RELE_PIN     14  // Relé que aciona o motor da esteira
+  // Definições de pinos
+  #define TRIG_PIN     18
+  #define ECHO_PIN     19
+  #define IR1_PIN      23  // Sensor IR 1
+  #define IR2_PIN      22  // Sensor IR 2
+  #define IR3_PIN      21  // Sensor IR 3
+  #define LED_SMALL    27
+  #define LED_MEDIUM   26
+  #define LED_LARGE    25
+  #define SERVO_PIN    13
+  #define ESTEIRA_PIN  14  // Motor da esteira
 
-Servo cancela;
+  Servo cancela;
 
-long medirDistancia() {
-  digitalWrite(TRIG_PIN, LOW);
-  delayMicroseconds(2);
-  digitalWrite(TRIG_PIN, HIGH);
-  delayMicroseconds(10);
-  digitalWrite(TRIG_PIN, LOW);
+  long medirDistancia() {
+    digitalWrite(TRIG_PIN, LOW);
+    delayMicroseconds(2);
+    digitalWrite(TRIG_PIN, HIGH);
+    delayMicroseconds(10);
+    digitalWrite(TRIG_PIN, LOW);
 
-  long dur = pulseIn(ECHO_PIN, HIGH, 20000);
-  long dist = (dur > 0) ? (dur * 0.034 / 2) : 999;
-  return dist;
-}
-
-void setup() {
-  Serial.begin(115200);
-
-  pinMode(TRIG_PIN, OUTPUT);
-  pinMode(ECHO_PIN, INPUT);
-
-  // Sensores infravermelhos (uso normal, sem pullup)
-  pinMode(IR1_PIN, INPUT);
-  pinMode(IR2_PIN, INPUT);
-  pinMode(IR3_PIN, INPUT);
-
-  // LEDs
-  pinMode(LED_SMALL, OUTPUT);
-  pinMode(LED_MEDIUM, OUTPUT);
-  pinMode(LED_LARGE, OUTPUT);
-
-  // Relé da esteira
-  pinMode(RELE_PIN, OUTPUT);
-  digitalWrite(RELE_PIN, LOW);  // Desliga relé no início
-
-  // Servo
-  cancela.attach(SERVO_PIN);
-  cancela.write(90); // posição neutra
-}
-
-void loop() {
-  long dist = medirDistancia();
-
-  if (dist < 10) {
-    Serial.println("Peça detectada → Ligando esteira");
-    digitalWrite(RELE_PIN, HIGH);  // Liga o motor via relé
-    delay(1000); // tempo para peça passar pelos sensores
-
-  //Leitura dos sensores IR (ativo = HIGH)
-    int s1 = digitalRead(IR1_PIN);
-    int s2 = digitalRead(IR2_PIN);
-    int s3 = digitalRead(IR3_PIN);
-    int total = s1 + s2 + s3;
-
-  digitalWrite(LED_SMALL, LOW);
-  digitalWrite(LED_MEDIUM, LOW);
-  digitalWrite(LED_LARGE, LOW);
-
-  if (total == 3) {
-      cancela.write(180);
-      digitalWrite(LED_LARGE, HIGH);
-      Serial.println("Peça GRANDE → Cancela 180°");
-    } else if (total == 2) {
-      cancela.write(135);
-      digitalWrite(LED_MEDIUM, HIGH);
-      Serial.println("Peça MÉDIA → Cancela 135°");
-    } else if (total == 1) {
-      cancela.write(45);
-      digitalWrite(LED_SMALL, HIGH);
-      Serial.println("Peça PEQUENA → Cancela 45°");
-    } else {
-      Serial.println("Tamanho não identificado.");
-    }
-
-  delay(2000);  // Tempo da peça na cancela
-  cancela.write(90);  // Volta para posição neutra
-  digitalWrite(RELE_PIN, LOW); // Desliga esteira
-  Serial.println("Esteira desligada\n");
-  delay(1000);
+    long dur = pulseIn(ECHO_PIN, HIGH, 20000);
+    long dist = (dur > 0) ? (dur * 0.034 / 2) : 999;
+    return dist;
   }
-}
+
+  void setup() {
+    Serial.begin(115200);
+
+    pinMode(TRIG_PIN, OUTPUT);
+    pinMode(ECHO_PIN, INPUT);
+
+    // Sensores infravermelhos (uso normal, sem pullup)
+    pinMode(IR1_PIN, INPUT);
+    pinMode(IR2_PIN, INPUT);
+    pinMode(IR3_PIN, INPUT);
+
+    // LEDs
+    pinMode(LED_SMALL, OUTPUT);
+    pinMode(LED_MEDIUM, OUTPUT);
+    pinMode(LED_LARGE, OUTPUT);
+
+    // Motor da esteira
+    pinMode(ESTEIRA_PIN, OUTPUT);
+    digitalWrite(ESTEIRA_PIN, LOW);  // Inicia desligado
+
+    // Servo
+    cancela.attach(SERVO_PIN);
+    cancela.write(90); // posição neutra
+  }
+
+  void loop() {
+    long dist = medirDistancia();
+
+    if (dist < 10) {
+      Serial.println("Peça detectada → Ligando esteira");
+      digitalWrite(ESTEIRA_PIN, HIGH);  // Liga esteira
+      delay(1000); // tempo para peça passar pelos sensores
+
+      // Leitura dos sensores IR (ativo = HIGH)
+      int s1 = digitalRead(IR1_PIN);
+      int s2 = digitalRead(IR2_PIN);
+      int s3 = digitalRead(IR3_PIN);
+      int total = s1 + s2 + s3;
+
+      digitalWrite(LED_SMALL, LOW);
+      digitalWrite(LED_MEDIUM, LOW);
+      digitalWrite(LED_LARGE, LOW);
+  
+      if (total == 3) {
+        cancela.write(180);
+        digitalWrite(LED_LARGE, HIGH);
+        Serial.println("Peça GRANDE → Cancela 180°");
+      } else if (total == 2) {
+        cancela.write(135);
+        digitalWrite(LED_MEDIUM, HIGH);
+        Serial.println("Peça MÉDIA → Cancela 135°");
+      } else if (total == 1) {
+        cancela.write(45);
+        digitalWrite(LED_SMALL, HIGH);
+        Serial.println("Peça PEQUENA → Cancela 45°");
+      } else {
+        Serial.println("Tamanho não identificado.");
+      }
+
+      delay(2000);  // Tempo da peça na cancela
+      cancela.write(90);  // Volta para posição neutra
+      digitalWrite(ESTEIRA_PIN, LOW); // Desliga esteira
+      Serial.println("Esteira desligada\n");
+      delay(1000);
+    }
+  }
+
 
 ## Conclusão
 
