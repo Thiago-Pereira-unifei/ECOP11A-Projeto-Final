@@ -31,132 +31,94 @@ Se um sistema automatizado for implementado utilizando sensores ultrassônicos e
 
 ## Código
 
-#include <Servo.h> // Inclui a biblioteca Servo para controlar o servo motor
+#include <Servo.h>  
 
-// --- Definições de Pinos ---
-// Pinos para o sensor ultrassônico (HC-SR04)
-#define TRIG_PIN     18 // Pino Trigger do sensor ultrassônico
-#define ECHO_PIN     19 // Pino Echo do sensor ultrassônico
+#define TRIG_PIN     18  
+#define ECHO_PIN     19  
+#define IR1_PIN      23  
+#define IR2_PIN      22  
+#define IR3_PIN      21  
+#define LED_SMALL    27  
+#define LED_MEDIUM   26  
+#define LED_LARGE    25  
+#define SERVO_PIN    13  
+#define ESTEIRA_PIN  14  
+  
+Servo cancela;  
+  
+long medirDistancia() {  
+  digitalWrite(TRIG_PIN, LOW);  
+  delayMicroseconds(2);  
+  digitalWrite(TRIG_PIN, HIGH);  
+  delayMicroseconds(10);  
+  digitalWrite(TRIG_PIN, LOW);  
+  
+  long dur = pulseIn(ECHO_PIN, HIGH, 20000);  
+  long dist = (dur > 0) ? (dur * 0.034 / 2) : 999;  
+  return dist;  
+}  
 
-// Pinos para os sensores infravermelhos (IR)
-#define IR1_PIN      23  // Sensor IR 1 (geralmente para a menor dimensão da peça)
-#define IR2_PIN      22  // Sensor IR 2 (para a dimensão média da peça)
-#define IR3_PIN      21  // Sensor IR 3 (para a maior dimensão da peça)
+void setup() {  
+  Serial.begin(115200);  
+  
+  pinMode(TRIG_PIN, OUTPUT);  
+  pinMode(ECHO_PIN, INPUT);  
+  
+  pinMode(IR1_PIN, INPUT);  
+  pinMode(IR2_PIN, INPUT);  
+  pinMode(IR3_PIN, INPUT);  
+  
+  pinMode(LED_SMALL, OUTPUT);  
+  pinMode(LED_MEDIUM, OUTPUT);  
+  pinMode(LED_LARGE, OUTPUT);  
+  
+  pinMode(ESTEIRA_PIN, OUTPUT);  
+  digitalWrite(ESTEIRA_PIN, LOW);  
+  
+  cancela.attach(SERVO_PIN);  
+  cancela.write(90);  
+}  
+  
+void loop() {  
+  long dist = medirDistancia();  
 
-// Pinos para os LEDs indicadores de tamanho
-#define LED_SMALL    27 // LED que acende para peças pequenas
-#define LED_MEDIUM   26 // LED que acende para peças médias
-#define LED_LARGE    25 // LED que acende para peças grandes
+  if (dist < 10) {  
+    Serial.println("Peça detectada → Ligando esteira");  
+    digitalWrite(ESTEIRA_PIN, HIGH);  
+    delay(1000);  
 
-// Pino para o servo motor que atua como cancela
-#define SERVO_PIN    13
+    int s1 = digitalRead(IR1_PIN);  
+    int s2 = digitalRead(IR2_PIN);  
+    int s3 = digitalRead(IR3_PIN);  
+    int total = s1 + s2 + s3;  
+  
+    digitalWrite(LED_SMALL, LOW);  
+    digitalWrite(LED_MEDIUM, LOW);  
+    digitalWrite(LED_LARGE, LOW);  
+  
+    if (total == 3) {  
+      cancela.write(180);  
+      digitalWrite(LED_LARGE, HIGH);  
+      Serial.println("Peça GRANDE → Cancela 180°");  
+    } else if (total == 2) {  
+      cancela.write(135);  
+      digitalWrite(LED_MEDIUM, HIGH);  
+      Serial.println("Peça MÉDIA → Cancela 135°");  
+    } else if (total == 1) {  
+      cancela.write(45);  
+      digitalWrite(LED_SMALL, HIGH);  
+      Serial.println("Peça PEQUENA → Cancela 45°");  
+    } else {  
+      Serial.println("Tamanho não identificado.");  
+    }  
 
-// Pino para o motor da esteira
-#define ESTEIRA_PIN  14  // Pino de controle do motor da esteira
-
-// --- Objeto Servo ---
-Servo cancela; // Cria um objeto Servo para controlar a cancela
-
-// --- Função: medirDistancia ---
-// Mede a distância usando o sensor ultrassônico
-long medirDistancia() {
-  // Garante que o pino TRIG esteja LOW no início
-  digitalWrite(TRIG_PIN, LOW);
-  delayMicroseconds(2); // Pequeno atraso para garantir um pulso limpo
-
-  // Envia um pulso HIGH de 10 microssegundos para o TRIG
-  digitalWrite(TRIG_PIN, HIGH);
-  delayMicroseconds(10);
-  digitalWrite(TRIG_PIN, LOW);
-
-  // Mede a duração do pulso no pino ECHO (tempo que o som leva para ir e voltar)
-  // O timeout de 20000 microssegundos (20ms) evita que o programa trave se nenhum eco for detectado
-  long dur = pulseIn(ECHO_PIN, HIGH, 20000);
-
-  // Calcula a distância em centímetros
-  // A velocidade do som no ar é de aproximadamente 0.034 cm/microsegundo.
-  // Dividimos por 2 porque o pulso percorre a distância duas vezes (ida e volta).
-  // Se dur for 0 (timeout), retorna 999 para indicar que nada foi detectado.
-  long dist = (dur > 0) ? (dur * 0.034 / 2) : 999;
-  return dist;
-}
-
-// --- Função: setup ---
-// Configura os pinos e inicializa a comunicação serial
-void setup() {
-  Serial.begin(115200); // Inicia a comunicação serial a 115200 bps para depuração
-
-  // Configura os pinos do sensor ultrassônico
-  pinMode(TRIG_PIN, OUTPUT); // TRIG como saída
-  pinMode(ECHO_PIN, INPUT);  // ECHO como entrada
-
-  // Configura os pinos dos sensores infravermelhos como entrada
-  // Não é necessário pullup interno se os sensores já tiverem resistores de pullup/pulldown
-  pinMode(IR1_PIN, INPUT);
-  pinMode(IR2_PIN, INPUT);
-  pinMode(IR3_PIN, INPUT);
-
-  // Configura os pinos dos LEDs como saída
-  pinMode(LED_SMALL, OUTPUT);
-  pinMode(LED_MEDIUM, OUTPUT);
-  pinMode(LED_LARGE, OUTPUT);
-
-  // Configura o pino do motor da esteira como saída
-  pinMode(ESTEIRA_PIN, OUTPUT);
-  digitalWrite(ESTEIRA_PIN, LOW);  // Garante que a esteira esteja desligada ao iniciar
-
-  // Associa o objeto Servo ao pino especificado
-  cancela.attach(SERVO_PIN);
-  cancela.write(90); // Move a cancela para a posição neutra (90 graus)
-}
-
-// --- Função: loop ---
-// Onde o programa principal é executado repetidamente
-void loop() {
-  long dist = medirDistancia(); // Mede a distância atual
-
-  // Verifica se uma peça foi detectada (distância menor que 10 cm)
-  if (dist < 10) {
-    Serial.println("Peça detectada → Ligando esteira");
-    digitalWrite(ESTEIRA_PIN, HIGH);  // Liga o motor da esteira
-    delay(1000); // Aguarda 1 segundo para a peça se mover e passar pelos sensores IR
-
-    // --- Leitura dos Sensores IR ---
-    // Os sensores IR retornam HIGH quando detectam uma peça (presença de luz refletida)
-    int s1 = digitalRead(IR1_PIN);
-    int s2 = digitalRead(IR2_PIN);
-    int s3 = digitalRead(IR3_PIN);
-    int total = s1 + s2 + s3; // Soma as leituras (0 ou 1) para determinar o tamanho
-
-    // Desliga todos os LEDs antes de acender o correto
-    digitalWrite(LED_SMALL, LOW);
-    digitalWrite(LED_MEDIUM, LOW);
-    digitalWrite(LED_LARGE, LOW);
-
-    // --- Lógica de Classificação e Ação da Cancela ---
-    if (total == 3) { // Se todos os 3 sensores detectaram (peça grande)
-      cancela.write(180); // Move a cancela para 180 graus
-      digitalWrite(LED_LARGE, HIGH); // Acende o LED de peça grande
-      Serial.println("Peça GRANDE → Cancela 180°");
-    } else if (total == 2) { // Se 2 sensores detectaram (peça média)
-      cancela.write(135); // Move a cancela para 135 graus
-      digitalWrite(LED_MEDIUM, HIGH); // Acende o LED de peça média
-      Serial.println("Peça MÉDIA → Cancela 135°");
-    } else if (total == 1) { // Se apenas 1 sensor detectou (peça pequena)
-      cancela.write(45); // Move a cancela para 45 graus
-      digitalWrite(LED_SMALL, HIGH); // Acende o LED de peça pequena
-      Serial.println("Peça PEQUENA → Cancela 45°");
-    } else { // Se nenhum sensor ou mais de 3 (situação inesperada)
-      Serial.println("Tamanho não identificado.");
-    }
-
-    delay(2000);  // Aguarda 2 segundos para a peça passar pela cancela
-    cancela.write(90);  // Retorna a cancela para a posição neutra (90 graus)
-    digitalWrite(ESTEIRA_PIN, LOW); // Desliga o motor da esteira
-    Serial.println("Esteira desligada\n"); // Imprime uma linha vazia para melhor visualização
-    delay(1000); // Pequeno atraso antes de procurar a próxima peça
-  }
-}
+    delay(2000);  
+    cancela.write(90);  
+    digitalWrite(ESTEIRA_PIN, LOW);  
+    Serial.println("Esteira desligada\n");  
+    delay(1000);  
+  }  
+}  
 
 
 ## Conclusão
